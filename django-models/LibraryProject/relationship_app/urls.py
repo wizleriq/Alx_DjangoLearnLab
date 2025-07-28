@@ -30,24 +30,13 @@
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from .models import Book
+from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
+from . import views  # <-- this brings in views.register
 
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('list_books')
-    else:
-        form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': form})
-
-
-def list_books(request):
-    books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
+urlpatterns = [
+    path('register/', views.register, name='register'),  # views.register
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # LoginView with custom template
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # LogoutView with custom template
+    path('books/', views.list_books, name='list_books'),
+]
