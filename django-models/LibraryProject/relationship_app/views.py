@@ -130,22 +130,33 @@
 # # #     context_object_name = 'library'
 
 
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from .models import Book  # or remove if you haven’t created this yet
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.detail import DetailView
+from .models import Book, Library
 
+# ✅ This is the function you are asking about
+def list_books(request):
+    books = Book.objects.select_related('author').all()
+    return render(request, 'relationship_app/list_books.html', {'books': books})
+
+# Registration view
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('list_books')
+            return render(request, 'relationship_app/login.html')
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-def list_books(request):
-    return render(request, 'relationship_app/list_books.html')
+# Library detail view
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = 'relationship_app/library_detail.html'
+    context_object_name = 'library'
