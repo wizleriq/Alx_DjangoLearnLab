@@ -30,6 +30,14 @@ Including another URLconf
 #     path('', include('relationship_app.urls')),  # Make sure this line is added
 # ]
 
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('bookshelf.urls')),  # replace 'bookshelf' with your app name
+]
+
 from django.urls import path
 from bookshelf.admin_view import admin_view
 from bookshelf.librarian_view import librarian_view
