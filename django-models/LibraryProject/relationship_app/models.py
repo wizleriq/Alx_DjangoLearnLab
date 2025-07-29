@@ -48,30 +48,14 @@
 #         return f"{self.user.username} - {self.role}"
 
 
-# from django.db import models
-# from django.contrib.auth.models import User
-
-# class UserProfile(models.Model):  # ✅ Required string
-#     ROLE_CHOICES = [
-#         ('Admin', 'Admin'),       # ✅ Required string
-#         ('Librarian', 'Librarian'),
-#         ('Member', 'Member'),     # ✅ Required string
-#     ]
-
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-
-#     def __str__(self):
-#         return f"{self.user.username} - {self.role}"
-
 from django.db import models
 from django.contrib.auth.models import User
 
-class UserProfile(models.Model):  # ✅ This exact line is required
+class UserProfile(models.Model):  # ✅ Required string
     ROLE_CHOICES = [
-        ("Admin", "Admin"),        # ✅ "Admin" must appear exactly like this
-        ("Librarian", "Librarian"),
-        ("Member", "Member"),      # ✅ "Member" must appear exactly like this
+        ('Admin', 'Admin'),       # ✅ Required string
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),     # ✅ Required string
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -79,5 +63,4 @@ class UserProfile(models.Model):  # ✅ This exact line is required
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
-
 
