@@ -22,11 +22,23 @@ Including another URLconf
 # ]
 
 
-from django.contrib import admin
-from django.urls import path, include
+# from django.contrib import admin
+# from django.urls import path, include
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('relationship_app.urls')),  # Make sure this line is added
+# ]
+
+from django.urls import path
+from bookshelf.admin_view import admin_view
+from bookshelf.librarian_view import librarian_view
+from bookshelf.member_view import member_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('relationship_app.urls')),  # Make sure this line is added
+    path('admin-dashboard/', admin_view, name='admin_view'),
+    path('librarian-dashboard/', librarian_view, name='librarian_view'),
+    path('member-dashboard/', member_view, name='member_view'),
 ]
+
 
