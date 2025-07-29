@@ -41,11 +41,21 @@
 #     path('books/', views.list_books, name='list_books'),
 # ]
 
+# from django.urls import path
+# from . import views
+
+# urlpatterns = [
+#     path('register/', views.register, name='register'),
+#     path('login/', views.CustomLoginView.as_view(), name='login'),
+#     path('logout/', views.CustomLogoutView.as_view(), name='logout'),
+# ]
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('register/', views.register, name='register'),
-    path('login/', views.CustomLoginView.as_view(), name='login'),
-    path('logout/', views.CustomLogoutView.as_view(), name='logout'),
+    path('books/add/', views.add_book, name='add-book'),
+    path('books/edit/<int:pk>/', views.edit_book, name='edit-book'),
+    path('books/delete/<int:pk>/', views.delete_book, name='delete-book'),
 ]
+
