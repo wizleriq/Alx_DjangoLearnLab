@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+# AUTH_USER_MODEL = 'accounts.CustomUser'
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MEDIA_URL = '/media/'
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'relationship_app',
     'bookshelf.apps.BookshelfConfig',
     'django.contrib.staticfiles',
-    'accounts',
+    # 'accounts',
 
     # 'bookshelf',
 ]
