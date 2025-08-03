@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-=n$w^$6h&9hfky=yx8p#bwcb)itjf5u0jppkof1ks5)ohj%m$i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
 
 
@@ -37,6 +38,7 @@ AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+APPEND_SLASH = True
 
 
 
