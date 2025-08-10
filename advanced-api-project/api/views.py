@@ -1,6 +1,7 @@
 # from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
@@ -9,7 +10,7 @@ from .serializers import BookSerializer
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serilizer):
@@ -21,7 +22,7 @@ class BookListView(generics.ListAPIView):
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_update(self, serializer):
         if serializer.validated_data.get('publiction_year') < 1500:
@@ -43,3 +44,4 @@ class BookUpdateView(generics.UpdateAPIView):
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
