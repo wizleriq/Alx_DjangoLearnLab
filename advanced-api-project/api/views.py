@@ -1,6 +1,8 @@
 # from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import status
 from .models import Book
@@ -12,6 +14,12 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     # permission_classes = [permissions.IsAuthenticated]
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
+    search_fields = ['title', 'author']
+    OrderingFilter = ['title', 'publication_year']
+    ordering = ['title']
 
     def perform_create(self, serilizer):
         title = serilizer.validated_data.get('title')
@@ -33,7 +41,7 @@ class BookDetailView(generics.RetrieveAPIView):
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
@@ -44,4 +52,4 @@ class BookUpdateView(generics.UpdateAPIView):
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
