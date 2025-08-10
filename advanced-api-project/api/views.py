@@ -1,5 +1,6 @@
 # from django.shortcuts import render
 from rest_framework import generics, permissions
+from django_filters import rest_framework
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -17,15 +18,16 @@ class BookListView(generics.ListAPIView):
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['title', 'author', 'publication_year']
+    # search_fields = ['title', 'author']
     search_fields = ['title', 'author']
-    OrderingFilter = ['title', 'publication_year']
+    Ordering_Filter = ['title', 'publication_year']
     ordering = ['title']
 
-    def perform_create(self, serilizer):
-        title = serilizer.validated_data.get('title')
-        if Book.Objects.filter(title=title).exists():
+    def perform_create(self, serializer):
+        title = serializer.validated_data.get('title')
+        if Book.objects.filter(title=title).exists():
             return Response({"error": "Book with this title already exists"},status=status.HTTP_400_BAD_REQUEST)
-        serilizer.save()
+        serializer.save()
 
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
