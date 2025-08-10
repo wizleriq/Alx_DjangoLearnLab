@@ -35,3 +35,13 @@ Ascending order: /api/books/?ordering=title
 
 Descending order: /api/books/?ordering=-publication_year
 
+
+## Testing
+To run tests:
+python manage.py test api
+
+Tests cover:
+- CRUD endpoints
+- Filtering, searching, ordering
+- Permission enforcement
+
