@@ -25,6 +25,10 @@ SECRET_KEY = 'django-insecure-+4ina$2u$2^r2hza)vqd^o8y)^6#vq#w2$9dzv6qqo#dx^jw2^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_REDIRECT_URL = "profile"
+LOGOUT_REDIRECT_URL = "login"
+LOGIN_URL = "login"
+
 ALLOWED_HOSTS = []
 
 # Static files (CSS, JS, Images)
