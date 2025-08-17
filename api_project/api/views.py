@@ -7,9 +7,19 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-class BookList(generics.ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    """
+     BookViewSet provides CRUD operations for Book model.
+    Authentication:
+        - Requires token authentication
+        - Only authenticated users can access endpoints
+    Permissions:
+        - IsAuthenticated: non-authenticated requests will be denied
+
+        """
+
+# class BookList(generics.ListAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
 
 # class BookCreate(generics.CreateAPIView):
 #     queryset = Book.objects.all()

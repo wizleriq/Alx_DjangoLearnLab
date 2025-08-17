@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,24 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # Authentication classes
+    # - TokenAuthentication: Users must provide a token for access
+    # - SessionAuthentication: Allows use of Django session (admin/browser)
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+     # Permission classes
+    # - IsAuthenticated: Only logged-in users (with token or session) can access API endpoints
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+# How to use:
+# 1. Obtain a token via POST /api/token/ with username & password.
+# 2. Include the token in the header of requests:
+#    Authorization: Token <your_token>
+# 3. Access endpoints: GET, POST, PUT, PATCH, DELETE as allowed by your viewsets.
