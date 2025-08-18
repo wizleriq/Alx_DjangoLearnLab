@@ -8,3 +8,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+    def clean_mail(self):
+        email = self.cleaned_data.get("email")
+        if User.object.filter(email__iexact=email).exists():
+            raise forms.ValidationError('Tis email has already been registered')
+        return email
