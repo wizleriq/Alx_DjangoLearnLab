@@ -12,5 +12,5 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_mail(self):
         email = self.cleaned_data.get("email")
         if User.object.filter(email__iexact=email).exists():
-            raise forms.ValidationError('Tis email has already been registered')
+            raise forms.ValidationError('This email has already been registered')
         return email
