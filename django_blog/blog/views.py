@@ -16,10 +16,6 @@ class PostListView(ListView):
     model = Post
     template_name = "blog/list.html"
 
-    def form_valid(self, form):
-        form.save(user=self.request.user)
-        return super().form_valid(form)
-
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/detail.html"
@@ -29,7 +25,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = "blog/create.html"
     form_class = PostForm
     success_url = reverse_lazy("post-list")
-
 
     def form_valid(self, form):
         form.instance.author = self.request.user
