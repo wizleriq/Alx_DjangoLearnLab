@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>All Posts</h2>
+
+<ul>
+  {% for post in object_list %}
+    <li>
+      <h3>
+        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+      </h3>
+      <p>{{ post.content|truncatechars:100 }}</p> <!-- short snippet -->
+      <small>By {{ post.author }} | {{ post.created_at }}</small>
+    </li>
+  {% empty %}
+    <p>No posts available yet.</p>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'post-create' %}">Create New Post</a>
+{% endblock %}
+
+
+
+
+<!-- {% extends "base.html" %}
+{% block content %}
+<h2>All Posts</h2>
 <ul>
   {% for post in object_list %}
   <li>
@@ -16,7 +40,7 @@
 </ul>
 
 <a href="{% url 'post-create' %}">Create New Post</a>
-{% endblock %}
+{% endblock %} -->
 
 
 

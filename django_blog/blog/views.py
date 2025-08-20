@@ -15,6 +15,7 @@ from .forms import PostForm
 class PostListView(ListView):
     model = Post
     template_name = "blog/list.html"
+    
 
 class PostDetailView(DetailView):
     model = Post

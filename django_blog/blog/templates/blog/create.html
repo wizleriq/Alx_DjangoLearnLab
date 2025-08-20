@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h2>{% if object %}Edit Post{% else %}Create Post{% endif %}</h2>
+<h2>Create Post</h2>
 
 <form method="post">
   {% csrf_token %}
@@ -10,6 +11,8 @@
 
 <a href="{% url 'post-list' %}">Cancel</a>
 {% endblock %}
+
+
 
 
 <!-- {% extends "base.html" %}
