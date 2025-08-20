@@ -3,13 +3,13 @@
 <h2>All Posts</h2>
 <ul>
   {% for post in object_list %}
-  <l1>
+  <li>
     <h3>
       <a href="{% url 'post-detail' post.pk %}">{{post.title}}</a>
     </h3>
     <p>{{ post.content|truncatechars:100 }}</p>
     <small>By {{ post.author }} | {{ post.created_at}}</small>
-  </l1>
+  </li>
   {% empty %}
   <P>No posts available yet.</P>
   {% endfor %}
