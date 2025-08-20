@@ -1,26 +1,9 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-<h2>Create Post</h2>
-
+<h1>Create New Post</h1>
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
-
-<a href="{% url 'post-list' %}">Cancel</a>
-{% endblock %}
-
-
-
-
-<!-- {% extends "base.html" %}
-{% block content %}
-  <h2>{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}</h2>
-  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-{% endblock %} -->
+    <button type="submit">Create Post</button>
+</form>
+{% endblock %}

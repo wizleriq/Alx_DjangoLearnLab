@@ -1,59 +1,8 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<h2>All Posts</h2>
-
-<ul>
-  {% for post in object_list %}
-    <li>
-      <h3>
-        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-      </h3>
-      <p>{{ post.content|truncatechars:100 }}</p> <!-- short snippet -->
-      <small>By {{ post.author }} | {{ post.created_at }}</small>
-    </li>
-  {% empty %}
-    <p>No posts available yet.</p>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'post-create' %}">Create New Post</a>
+<h1>All Blog Posts</h1>
+{% for post in posts %}
+    <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+    <p>{{ post.content|truncatewords:20 }}</p>
+{% endfor %}
 {% endblock %}
-
-
-
-
-<!-- {% extends "base.html" %}
-{% block content %}
-<h2>All Posts</h2>
-<ul>
-  {% for post in object_list %}
-  <li>
-    <h3>
-      <a href="{% url 'post-detail' post.pk %}">{{post.title}}</a>
-    </h3>
-    <p>{{ post.content|truncatechars:100 }}</p>
-    <small>By {{ post.author }} | {{ post.created_at}}</small>
-  </li>
-  {% empty %}
-  <P>No posts available yet.</P>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'post-create' %}">Create New Post</a>
-{% endblock %} -->
-
-
-
-<!-- {% extends "base.html" %}
-{% block content %}
-  <h2>All Posts</h2>
-  <a href="{% url 'post-create' %}">+ New Post</a>
-  <ul>
-    {% for post in posts %}
-      <li>
-        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-        by {{ post.author }}
-      </li>
-    {% endfor %}
-  </ul>
-{% endblock %} -->

@@ -32,5 +32,8 @@ def home(request):
 urlpatterns = [
     path('', home),
     path("admin/", admin.site.urls),
-    path("", include("blog.urls")),  # include blog app urls
+    # path("", include("blog.urls")),  # include blog app urls
+    path('', include('blog.urls')),  # Blog URLs under /blog/
 ]
+
+

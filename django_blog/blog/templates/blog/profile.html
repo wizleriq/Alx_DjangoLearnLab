@@ -1,7 +1,8 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}Profile{% endblock %}
-
 {% block content %}
-<h2>Welcome, {{ request.user.username }}</h2>
-<p>Email: {{ request.user.email }}</p>
+<h1>Welcome, {{ user.username }}!</h1>
+<p>Email: {{ user.email }}</p>
+<p><a href="{% url 'post-list' %}">View All Posts</a></p>
+<p><a href="{% url 'logout' %}">Logout</a></p>
 {% endblock %}

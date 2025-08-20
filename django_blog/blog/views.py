@@ -18,23 +18,23 @@ from rest_framework.permissions import IsAuthenticated
 class PostListView(ListView):
     model = Post
     template_name = "blog/list.html"
-    authenticated_class = [TokenAuthentication]
-    permission_class = IsAuthenticated
+    # authenticated_class = [TokenAuthentication]
+    # permission_class = IsAuthenticated
     
 
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/detail.html"
-    authenticated_class = [TokenAuthentication]
-    permission_class = IsAuthenticated
+    # authenticated_class = [TokenAuthentication]
+    # permission_class = IsAuthenticated
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "blog/create.html"
     form_class = PostForm
     success_url = reverse_lazy("post-list")
-    authentication_class = [TokenAuthentication]
-    permission_class = [IsAuthenticated]
+    # authentication_class = [TokenAuthentication]
+    # permission_class = [IsAuthenticated]
 
 
     def form_valid(self, form):
@@ -69,20 +69,20 @@ def register(request):
             return redirect("profile")
     else:
         form = CustomUserCreationForm()
-    return render(request, "accounts/register.html", {"form": form})
+    return render(request, "blog/register.html", {"form": form})
 
 # Login view
 class CustomLoginView(LoginView):
-    template_name = "accounts/login.html"
+    template_name = "blog/login.html"
 
 # Logout view
 class CustomLogoutView(LogoutView):
-    template_name = "accounts/logout.html"
+    template_name = "blog/logout.html"
 
 # Profile view
 @login_required
 def profile(request):
-    return render(request, "accounts/profile.html")
+    return render(request, "blog/profile.html")
 
 
 # class PostListView(generics.ListAPIView):
