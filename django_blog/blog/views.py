@@ -32,13 +32,16 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = "blog/update.html"
 
     def test_func(self):
         post = self.get_object()
-        return self.request.user== post.user
+        return self.request.user == post.author
     
-class PostDeletwView(LoginRequiredMixin,  UserPassesTestMixin, DeleteView):
+    
+    
+class PostDeleteView(LoginRequiredMixin,  UserPassesTestMixin, DeleteView):
     model = Post
     template_name = "blog/delete.html"
     success_url = reverse_lazy("post-list")

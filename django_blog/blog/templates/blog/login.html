@@ -1,4 +1,21 @@
-{% extends "base.html" %}
+extends "base.html" %
+{% block content %}
+
+<h2>{{object.title}}</h2>
+<p>{{ object.content}}</p>
+
+<P><small>By {{ object.author }} | {{ object.created_at }}</small></P>
+
+{% if user == object.author %}
+<a href="{% url 'post-update' object.pk %}">Edit</a>
+<a href="{% url 'post-delete' object.pk %}">Delete</a>
+{% endif %}
+
+<a href="{% url 'post-list' %}">Back to Posts</a>
+{% endblock %}
+
+
+<!-- {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
@@ -8,4 +25,4 @@
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
-{% endblock %}
+{% endblock %} -->
