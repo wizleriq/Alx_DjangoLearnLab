@@ -39,8 +39,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         post = self.get_object()
         return self.request.user == post.author
     
-    
-    
 class PostDeleteView(LoginRequiredMixin,  UserPassesTestMixin, DeleteView):
     model = Post
     template_name = "blog/delete.html"
@@ -49,30 +47,8 @@ class PostDeleteView(LoginRequiredMixin,  UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
-
-# class PostListView(generics.ListAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-# class PostDetailView(generics.RetrieveAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-# class PostCreateView(generics.CreateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = IsAuthenticated
-
-# class PostUpdateView(generics.UpdateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-# class PostDeleteView(generics.DestroyAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-
-# Registration view
+    
+    # Registration view
 def register(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -96,3 +72,27 @@ class CustomLogoutView(LogoutView):
 @login_required
 def profile(request):
     return render(request, "accounts/profile.html")
+
+
+# class PostListView(generics.ListAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+
+# class PostDetailView(generics.RetrieveAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+
+# class PostCreateView(generics.CreateAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#     authentication_classes = [TokenAuthentication]
+#     permission_classes = IsAuthenticated
+
+# class PostUpdateView(generics.UpdateAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+
+# class PostDeleteView(generics.DestroyAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+
