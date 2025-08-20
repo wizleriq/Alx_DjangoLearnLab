@@ -10,22 +10,32 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 #CRUD operations
 class PostListView(ListView):
     model = Post
     template_name = "blog/list.html"
+    authenticated_class = [TokenAuthentication]
+    permission_class = IsAuthenticated
     
 
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/detail.html"
+    authenticated_class = [TokenAuthentication]
+    permission_class = IsAuthenticated
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "blog/create.html"
     form_class = PostForm
     success_url = reverse_lazy("post-list")
+    authentication_class = [TokenAuthentication]
+    permission_class = [IsAuthenticated]
+
 
     def form_valid(self, form):
         form.instance.author = self.request.user
