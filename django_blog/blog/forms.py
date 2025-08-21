@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Comment
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -29,3 +29,24 @@ class CustomUserCreationForm(UserCreationForm):
         if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError('This email has already been registered')
         return email
+    
+#Form setup for comment section:
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        # fields = ['post', 'author', 'content', 'created_at', 'updated_at']
+
+        def clean_content(self):
+            content = self.clean_content.get()
+            if len(content) < 5:
+                raise forms.ValidationError("Length too short")
+            return content
+
+        # def clean_content(self):
+        #     content = self.clean_content.get()
+        #     if len(content) < 5:
+        #         raise forms.ValidationError('Text too short')
+        #     return content
+
+    
