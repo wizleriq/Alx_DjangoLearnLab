@@ -96,8 +96,44 @@ class CommentListView(ListView):
     template_name = "blog/comment_list.html"
     context_object_name = "comments"
 
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post_id = self.kwargs["pk"]
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+    
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name ='blog/comment_form.html'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author
+    
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
     
     # Registration view
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_delete.html'
+
+    def test_func(self):
+        return self.request.user == self.get_object().author 
+    
+    def get_success_url(self):
+        return self.object.post.get_absloute_url()
+
+
+
 def register(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
