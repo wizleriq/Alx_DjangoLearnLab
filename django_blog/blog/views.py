@@ -9,9 +9,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Post, Comment
+from django.views.generic import View, UpdateView, DeleteView
+# from rest_framework import views, generics
 from .forms import PostForm, CommentForm
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404, redirect
+
+# from django.shortcuts import get_list_or_404, redirect
 
 
 #CRUD operations for Post
@@ -32,7 +37,7 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
         comments = post.comments.all()
-        context["comments"]
+        context["comments"] =comments
         context["comment_form"] = CommentForm()
         return context
     
@@ -45,7 +50,7 @@ class AddCommentView(LoginRequiredMixin, View):
             comment.author = request.user
             comment.post = post
             comment.save()
-        return redirect("post_detail", pk=post.pk)
+        return redirect("post-detail", pk=post.pk)
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -80,9 +85,17 @@ class PostDeleteView(LoginRequiredMixin,  UserPassesTestMixin, DeleteView):
     
 #CRUD Operation for Comments
 
+# class CommentListView(ListView):
+#     queryset = Comment.objects.all()
+#     serializer_class =
+
+
 class CommentListView(ListView):
-    queryset = Comment.objects.all()
-    seriali
+    """Display all comments (optional, mostly for debugging)"""
+    model = Comment
+    template_name = "blog/comment_list.html"
+    context_object_name = "comments"
+
     
     # Registration view
 def register(request):
