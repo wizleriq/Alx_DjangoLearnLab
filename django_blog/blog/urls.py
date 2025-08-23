@@ -11,6 +11,7 @@
 from django.urls import path
 from .views import register, CustomLoginView, CustomLogoutView, profile
 from .views import ( PostListView, PostCreateView, PostDetailView, PostUpdateView, PostDeleteView)
+from .views import CommentCreateView, CommentListView, CommentUpdateView, CommentDeleteView
 
 urlpatterns = [
     # Post CRUD URLs
@@ -27,7 +28,12 @@ urlpatterns = [
     path('posts/<int:pk>/edit/', PostUpdateView.as_view(), name='post-update'),
     path('posts/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     
-    
+    #URL FOR COMMENT
+    path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='create-view'),
+    path("comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment-edit"),
+    path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"),
+
+
     # Auth & profile URLs
     path("register/", register, name="register"),
     path("login/", CustomLoginView.as_view(), name="login"),
