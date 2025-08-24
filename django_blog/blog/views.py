@@ -148,7 +148,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, "blog/register.html", {"form": form})
 
-class PostSearchListView(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = "blog/search.html"
     content_object_name = 'post'
