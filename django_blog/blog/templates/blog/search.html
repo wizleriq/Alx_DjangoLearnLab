@@ -1,0 +1,19 @@
+<h2>Saearch Result for"{{ reqest.GET.q}}"</h2>
+
+{% if posts %}
+<ul>
+    <li>
+        <a href="{% url 'post_detail' post.pk %}">{{ post.title}}</a>
+        <p>{{ post.content|truncateworkd: 30}}</p>
+        <P>
+            Tags:
+            {% for tag in pos.tag.all %}
+            <a href="{{% url 'post_by_tag' tag.name %}}">{{ tag.name }}</a>
+            {% end for %}
+        </P>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No posts found</p>
+{% endif %}

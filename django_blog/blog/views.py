@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from .forms import CustomUserCreationForm
 from rest_framework import views, generics
 from .models import Post
+from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -146,6 +147,23 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, "blog/register.html", {"form": form})
+
+class PostSearchListView(ListView):
+    model = Post
+    template_name = "blog/search.html"
+    content_object_name = 'post'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        query_set = Post.objects_all
+        if query:
+            query_set = query_set.filer(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return query_set
+    
 
 # Login view
 class CustomLoginView(LoginView):
