@@ -155,16 +155,13 @@ class PostSearchListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        query_set = Post.objects_all()
-        
-        if query:
-            query_set = query_set.filter(
+        all_posts = Post.objects.all()
+        filtered_posts = Post.objects.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
                 Q(tags__name__icontains=query)
-            ).distinct()
-        return query_set
-    
+            ).distinct() if query else all_posts
+        return filtered_posts
 
 # Login view
 class CustomLoginView(LoginView):
