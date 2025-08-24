@@ -155,9 +155,10 @@ class PostSearchListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        query_set = Post.objects_all
+        query_set = Post.objects_all()
+        
         if query:
-            query_set = query_set.filer(
+            query_set = query_set.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
                 Q(tags__name__icontains=query)
