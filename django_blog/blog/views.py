@@ -57,6 +57,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = "blog/create.html"
     form_class = PostForm
     success_url = reverse_lazy("post-list")
+    # success_url = '/'  # change to wherever you want
+
     # authentication_class = [TokenAuthentication]
     # permission_class = [IsAuthenticated]
 
