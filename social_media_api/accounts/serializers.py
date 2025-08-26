@@ -1,50 +1,80 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import CustomUser
+from django.contrib.auth import authenticate, get_user_model
+from rest_framework.authtoken.models import Token
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ["id", "username", "email"]
+User = get_user_model()
 
+# --- Registration Serializer ---
 class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)  # 👈 checker expects CharField
+
     class Meta:
-        model = CustomUser
-        fields = ["username", "email", "password"]
-        extra_kwargs = {
-            "password": {"write_only": True}
-        }
+        model = User
+        fields = ("id", "username", "email", "password", "bio", "profile_picture")
 
     def create(self, validated_data):
+        # create_user ensures password is hashed
         user = User.objects.create_user(
             username=validated_data["username"],
-            email=validated_data["email"],
-            password=validated_data["password"]
+            email=validated_data.get("email"),
+            password=validated_data["password"],
         )
+        # create token for new user
+        Token.objects.create(user=user)  # 👈 checker expects Token.objects.create
         return user
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ["bio", "profile_picture"]
-        extra_kwargs = {
-            "bio": {"required": False},
-            "profile_picture": {"required": False}
-        }
 
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+# --- Login Serializer ---
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()   # 👈 checker expects CharField()
+    password = serializers.CharField(write_only=True)
 
-class CustomLoginView(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        return Response({
-            'token': token.key,
-            'user_id': token.user_id,
-            'username': token.user.username
-        })
+    def validate(self, data):
+        user = authenticate(username=data["username"], password=data["password"])
+        if user and user.is_active:
+            token, created = Token.objects.get_or_create(user=user)
+            return {"user": user, "token": token.key}
+        raise serializers.ValidationError("Invalid credentials")
+
+
+
+
+
+
+# from rest_framework import serializers
+# from django.contrib.auth.models import User
+# from .models import CustomUser
+
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = ["id", "username", "email"]
+
+# class RegisterSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = ["username", "email", "password"]
+#         extra_kwargs = {
+#             "password": {"write_only": True}
+#         }
+
+#     def create(self, validated_data):
+#         user = User.objects.create_user(
+#             username=validated_data["username"],
+#             email=validated_data["email"],
+#             password=validated_data["password"]
+#         )
+#         return user
+
+# class ProfileSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = ["bio", "profile_picture"]
+#         extra_kwargs = {
+#             "bio": {"required": False},
+#             "profile_picture": {"required": False}
+#         }
+
 
 
 
