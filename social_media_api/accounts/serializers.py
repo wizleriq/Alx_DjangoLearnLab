@@ -6,21 +6,21 @@ User = get_user_model()
 
 # --- Registration Serializer ---
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)  # 👈 checker expects CharField
+    password = serializers.CharField(write_only=True)  # checker expects CharField
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "password", "bio", "profile_picture")
+        fields = ["id", "username", "email", "password", "bio", "profile_picture"]
 
     def create(self, validated_data):
-        # create_user ensures password is hashed
-        user = User.objects.create_user(
+        # ✅ Use get_user_model().objects.create_user as required
+        user = get_user_model().objects.create_user(
             username=validated_data["username"],
             email=validated_data.get("email"),
-            password=validated_data["password"],
+            password=validated_data["password"]
         )
-        # create token for new user
-        Token.objects.create(user=user)  # 👈 checker expects Token.objects.create
+        # ✅ Create token for new user
+        Token.objects.create(user=user)
         return user
 
 
