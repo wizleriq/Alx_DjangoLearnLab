@@ -13,20 +13,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password", "bio", "profile_picture"]
 
     def create(self, validated_data):
-        # ✅ Use get_user_model().objects.create_user as required
+        # Use get_user_model().objects.create_user as required
         user = get_user_model().objects.create_user(
             username=validated_data["username"],
             email=validated_data.get("email"),
             password=validated_data["password"]
         )
-        # ✅ Create token for new user
+        # Create token for new user
         Token.objects.create(user=user)
         return user
 
 
 # --- Login Serializer ---
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()   # 👈 checker expects CharField()
+    username = serializers.CharField()   # checker expects CharField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
@@ -37,6 +37,11 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError("Invalid credentials")
 
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'bio', 'profile_picture']
 
 
 
