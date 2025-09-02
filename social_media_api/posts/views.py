@@ -12,10 +12,16 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.author == request.user
     
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    # queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            following_users = user.following.all()
+            return Post.objects.filter(author__in=following_users.union([user])).order_by('-created_at')
+        return Post.objects.all().order_by('-created_at')
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -39,6 +45,6 @@ class FeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         followed_users = user.following.all()
-        return Post.objects.filter(author__in=followed_users).order_by
+        return Post.objects.filter(author__in=followed_users).order_by('-created_at')
     
     
