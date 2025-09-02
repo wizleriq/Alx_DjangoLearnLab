@@ -1,9 +1,12 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, status, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.shortcuts import get_list_or_404
+from .models import CustomUser
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
+from rest_framework.decorators import api_view, permission_classes
 
 
 User = get_user_model()
@@ -45,6 +48,21 @@ class CustomLoginView(ObtainAuthToken):
             'user_id': token.user_id,
             'username': token.user.username
         })
+    
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def follow_user(request, user_id):
+    user_to_follow = get_list_or_404(CustomUser, id=user_id)
+    request.user.follow(user_to_follow)
+    return Response({"message":f"You are now following {user_to_follow.username}"}, status=status.HTTP_200_0K)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_list_or_404(CustomUser, id=user_id)
+    request.user.unfollow(user_id)
+    return Response ({"message": f"You unfollowed {user_to_unfollow.username}"}, status=status.HTTP_200_OK)
+
 
 
 
