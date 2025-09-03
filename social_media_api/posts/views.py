@@ -20,8 +20,9 @@ class PostViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.is_authenticated:
             following_users = user.following.all()
-            return Post.objects.filter(author__in=following_users.union([user])).order_by('-created_at')
+            return Post.objects.filter(author__in=following_users).order_by('-created_at')
         return Post.objects.all().order_by('-created_at')
+    
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -44,7 +45,6 @@ class FeedView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        followed_users = user.following.all()
-        return Post.objects.filter(author__in=followed_users).order_by('-created_at')
-    
+        following_users = user.following.all()
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
     
