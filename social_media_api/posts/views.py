@@ -58,8 +58,8 @@ class LikeView(generics.GenericAPIView):
         post = generics.get_object_or_404(Post, pk=pk)
 
         like, created = Like.objects.get_or_create(
-            user = request.user,
-            post = post
+            user=request.user,
+            post=post
         )
         if created:
             if post.suthor != request.user:
@@ -73,3 +73,5 @@ class LikeView(generics.GenericAPIView):
         else:
             like.delete()
             return Response({"message": "Post unliked"}, status=status.HTTP_200_OK)
+        
+        
