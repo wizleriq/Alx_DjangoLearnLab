@@ -36,7 +36,8 @@ class Comment(models.Model):
         return f"Comment by {self.author} on {self.post}"
 
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_posts')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_posts')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
     timestamp = models.DateTimeField(auto_now_add=True)
 
