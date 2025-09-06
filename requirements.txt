@@ -27,7 +27,7 @@ psycopg==3.2.9
 psycopg-binary==3.2.9
 psycopg2==2.9.10
 psycopg2-binary==2.9.10
-pygame==2.6.0
+# pygame==2.6.0
 PyJWT==2.10.1
 requests==2.32.3
 scipy==1.14.0
