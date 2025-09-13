@@ -9,7 +9,7 @@ services:
     plan: free
     name: social_media_api
     runtime: python
-    buildCommand: './build.sh'
+    buildCommand: "cd social_media_api && chmod +x build.sh && ./build.sh"
     startCommand: 'cd social_media_api && gunicorn social_media_api.asgi:application -k uvicorn.workers.UvicornWorker'
     envVars:
       - key: DATABASE_URL
