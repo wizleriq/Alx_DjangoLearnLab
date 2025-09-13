@@ -10,9 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+# from pathlib import Path
+# import dj_database_url 
+# import os
 from pathlib import Path
-import dj_database_url 
+from dotenv import load_dotenv
+load_dotenv()
 import os
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,13 +36,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-key')  # f
 # DEBUG = True
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
-
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,13 +50,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'accounts',
     'rest_framework.authtoken',
+    'corsheaders',
     'posts',
     'notifications',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -109,15 +115,32 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# Replace the SQLite DATABASES configuration with PostgreSQL:
-DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://postgres:postgres@localhost:5432/social_media_api',
-        conn_max_age=600
-    )
-}
 
+# Replace the SQLite DATABASES configuration with PostgreSQL:
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default='postgresql://postgres:postgres@localhost:5432/social_media_api',
+#         conn_max_age=600
+#     )
+# }
+
+if DEBUG:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+else:
+    # Use PostgreSQL in production (Render provides DATABASE_URL)
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL', 'postgres://postgres:pass@localhost:5432/social_media_api'),
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
 
 
 # Password validation
@@ -157,8 +180,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 if not DEBUG:
@@ -172,3 +195,23 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS settings
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        origin.strip()
+        for origin in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+        if origin.strip()
+    ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:3000",
+#     "http://localhost:3000",
+# ]
